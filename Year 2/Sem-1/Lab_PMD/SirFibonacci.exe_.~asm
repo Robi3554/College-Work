@@ -1,0 +1,24 @@
+.model small
+.data
+num1 DB 0
+num2 DB 1
+num3 DB ?
+.code
+main proc
+MOV DL, num1
+MOV AH, 2
+MOV DL, ' '
+INT 21H
+
+MOV DL, num2
+MOV AH, 2
+MOV DL, ' '
+INT 21H
+
+main endp
+end
+
+
+
+
+; [SOURCE]: C:\emu8086\MySource\SirFibonacci.asm

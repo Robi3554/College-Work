@@ -1,0 +1,120 @@
+ORG 100h
+
+.MODEL SMALL
+.STACK
+.DATA
+MSG DB ' Suma este: ','$'
+X DB ?
+SUM DW 0
+AUX DW 0
+SUM2 DW ?
+.CODE
+
+.MAIN PROC
+MOV AX, @data
+MOV DS, AX
+
+MOV AH, 1
+INT 21H
+SUB AL, 30h
+MOV X, AL
+MOV CL, X
+ADD CL, 1
+
+CICLE:
+MOV AX, AUX
+CMP AX, 3
+JB IF1
+CMP AUX, 2
+JG IF2_1
+IF2_1:
+CMP AUX, 5
+JLE IF2
+CMP AUX, 6
+JGE IF3
+
+
+IF1:
+MOV BX, AX
+MUL BX
+MOV BX, 3
+MUL BX
+
+MOV SUM2, AX
+MOV AX, AUX
+MOV BX, 6
+MUL BX
+MOV BX, AX
+ADD BX, SUM2
+MOV SUM2, BX
+
+MOV AX, SUM2
+ADD AX, 2
+INC AUX
+JMP SUMA
+
+IF2:
+MOV AX, AUX
+MOV BX, AUX
+MUL AX
+MOV BX, AUX
+MUl BX
+MOV BX, 2
+MUL BX
+
+INC AUX
+JMP SUMA
+
+IF3:
+MOV AX, 2
+JMP SUMA
+
+SUMA:
+ADD SUM, AX
+
+LOOP CICLE
+
+
+
+
+START:  MOV AX, @DATA
+MOV DS, AX
+
+MOV AH, 09H
+LEA DX, MSG
+INT 21H           ;Calls MS DOS to display message
+
+MOV AX, SUM  ;Number to be displayed
+CALL display            ;Calls procedure display to display number
+
+MOV AH, 4CH
+INT 21H
+
+
+
+
+display   proc       ;Beginning of procedure
+MOV BX, 10     ;Initializes divisor
+MOV DX, 0000H    ;Clears DX
+MOV CX, 0000H    ;Clears CX
+
+;Splitting process starts here
+.Dloop1:
+MOV DX, 0000H    ;Clears DX during jump
+div BX      ;Divides AX by BX
+PUSH DX     ;Pushes DX(remainder) to stack
+INC CX      ;Increments counter to track the number of digits
+CMP AX, 0     ;Checks if there is still something in AX to divide
+JNE .Dloop1     ;Jumps if AX is not zero
+
+.Dloop2:  POP DX      ;Pops from stack to DX
+ADD DX, 30H     ;Converts to it's ASCII equivalent
+MOV AH, 02H
+INT 21H      ;calls DOS to display character
+LOOP .Dloop2    ;Loops till CX equals zero
+RET       ;returns control
+display  ENDP
+
+
+
+; [SOURCE]: C:\emu8086\MySource\Tema3.asm

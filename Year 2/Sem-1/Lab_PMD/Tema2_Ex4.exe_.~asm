@@ -1,0 +1,39 @@
+.model small
+.data
+A DB 0
+B DB 0
+C DB 0
+SUM DB ?
+.code
+main proc
+MOV AX, @data
+MOV DS, AX
+
+MOV AH, 1
+INT 21H
+MOV A, AL
+
+MOV AH, 1
+INT 21H
+MOV C, AL
+
+MOV AH, 1
+INT 21H
+MOV B, AL
+
+MOV AL, A
+SUB AL, C
+
+ADD AL, B
+
+MOV SUM, AL
+
+MOV AH, 2
+MOV DL, AL
+INT 21H
+main endp
+end
+
+
+
+; [SOURCE]: C:\emu8086\MySource\Tema2_Ex4.asm

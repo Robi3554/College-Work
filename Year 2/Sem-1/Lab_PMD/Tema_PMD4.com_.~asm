@@ -1,0 +1,205 @@
+org 100h
+
+.model large
+.data
+
+n_line DB 0AH,0DH,"$"
+msg dd ?
+n db ?
+sum db ?
+
+.code
+main proc
+mov ax,@data
+mov ds,ax
+
+mov ah,1
+int 21h
+sub al,30h
+mov n,al
+mov cl,n
+
+input:
+mov ah,1
+int 21h
+cmp al,13
+je endr
+mov [si],al
+inc si
+jmp input
+
+endr:
+mov [si],'$'
+mov di,offset msg
+mov dl,13
+mov ah,2
+int 21h
+mov dl,10
+mov ah,2
+int 21h
+inc si
+
+loop input
+
+mov [si],1
+mov di,0
+mov si,0
+
+copy:
+mov bl,[si]
+mov [di],bl
+cmp [si],'$'
+je  mut
+inc di
+inc si
+jmp copy
+
+mut:
+inc si
+mov di,0
+
+compar:
+cmp [si],1
+je GATA
+mov bl,[di]
+cmp [si],bl
+je cmp1
+jmp incre
+
+cmp1:
+inc di
+inc si
+mov bl,[di]
+cmp bl,'$'
+je addn
+cmp bl,[si]
+je cmp2
+jmp incre
+
+cmp2:
+inc di
+inc si
+mov bl,[di]
+cmp bl,'$'
+je addn
+cmp bl,[si]
+je cmp3
+jmp incre
+
+cmp3:
+inc di
+inc si
+mov bl,[di]
+cmp bl,'$'
+je addn
+cmp bl,[si]
+je cmp4
+jmp incre
+
+cmp4:
+inc di
+inc si
+mov bl,[di]
+cmp bl,'$'
+je addn
+cmp bl,[si]
+je cmp5
+jmp incre
+
+cmp5:
+inc di
+inc si
+mov bl,[di]
+cmp bl,'$'
+je addn
+cmp bl,[si]
+je cmp6
+jmp incre
+
+cmp6:
+inc di
+inc si
+mov bl,[di]
+cmp bl,'$'
+je addn
+cmp bl,[si]
+je cmp7
+jmp incre
+
+cmp7:
+inc di
+inc si
+mov bl,[di]
+cmp bl,'$'
+je addn
+cmp bl,[si]
+jne compar
+jmp incre
+
+
+incre:
+inc di
+cmp [di],'$'
+je next
+jmp compar
+
+next:
+cmp [si],'$'
+jne nextstring
+cmp [si],1
+jmp mut
+
+nextstring:
+inc si
+jmp next
+
+
+
+
+addn:
+
+add sum,1
+
+
+LEA DX,n_line
+MOV AH,9
+INT 21H
+
+decs:
+dec si
+cmp [si],'$'
+jne decs
+
+afis:
+inc si
+cmp [si],'$'
+je mut
+mov dl,[si]
+
+mov ah,2H
+int 21h
+
+cmp [si],'$'
+jne afis
+
+
+
+jmp next
+
+
+GATA:
+
+mov dl,sum
+add dl,30h
+mov ah,2
+int 21h
+
+
+main endp
+end
+
+ret
+
+
+
+; [SOURCE]: C:\emu8086\MySource\Tema_PMD4.asm

@@ -1,0 +1,84 @@
+.model small
+.data
+A DB 0
+B DB 0
+C DB 0
+D DB 0
+SUM1 DB ?
+SUM2 DB ?
+DIF DB ?
+.code
+main proc
+MOV AX, @data
+MOV DS, AX
+
+MOV AH, 1
+INT 21H
+SUB AL, 30h
+MOV A, AL
+MOV DL, ' '
+MOV AH, 2
+INT 21H
+
+MOV AH, 1
+INT 21H
+SUB AL, 30h
+MOV B, AL
+MOV DL, ' '
+MOV AH, 2
+INT 21H
+
+MOV AH, 1
+INT 21H
+SUB AL, 30h
+MOV C, AL
+MOV DL, ' '
+MOV AH, 2
+INT 21H
+
+MOV AH, 1
+INT 21H
+SUB AL, 30h
+MOV D, AL
+MOV DL, ' '
+MOV AH, 2
+INT 21H
+
+MOV AL, A
+ADD AL, D
+ADD AL, 30h
+
+MOV SUM1, AL
+MOV AH, 2
+MOV DL, SUM1
+INT 21H
+MOV DL, ' '
+INT 21H
+
+MOV AL, C
+ADD AL, B
+ADD AL, 30h
+
+MOV SUM2, AL
+MOV AH, 2
+MOV DL, SUM2
+INT 21H
+MOV DL, ' '
+INT 21H
+
+MOV AL, SUM1
+SUB AL, SUM2
+
+ADD AL, 30h
+MOV DIF, AL
+MOV AH, 2
+MOV DL, DIF
+
+INT 21H
+
+main endp
+end
+
+
+
+; [SOURCE]: C:\emu8086\MySource\Tema2_Ex5.asm

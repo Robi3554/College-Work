@@ -1,0 +1,31 @@
+; Impartirea (A + B) / C
+
+.model small
+.data
+
+A DB 2
+B DB 4
+C DB 3
+
+.code
+
+main proc
+MOV AX, @data
+MOV DS, AX
+
+MOV AL, A
+ADD AL, B
+MOV BL, C
+MOV AH, 0
+DIV BL
+MOV DL, AL
+;ADD DL, 30h
+MOV AH, 2
+INT 21h
+
+main endp
+end
+
+
+
+; [SOURCE]: C:\emu8086\MySource\Lab.5_PMD.asm

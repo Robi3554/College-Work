@@ -1,0 +1,67 @@
+org 100h
+
+jmp start
+a db 0
+b db 1
+c db 1
+prod db ?
+
+.code
+main proc
+printSpace:
+MOV dl, ' '
+MOV ah, 2
+INT 21h
+RET
+
+
+
+start:
+MOV ah, 2
+MOV dl, a
+ADD dl, 30h
+INT 21H
+CALL printSpace
+
+mov ah, 2
+mov dl, b
+add dl, 30h
+int 21H
+call printSpace
+
+mov ah, 2
+mov dl, c
+add dl, 30h
+int 21H
+call printSpace
+
+mov cx, 4
+
+Fibonacci:
+
+mov bl, b
+add bl, c
+add dl,30h
+mov dl, bl
+mov bl, b
+mov c, bl
+mov bl, dl
+mov b, bl
+
+mov ah, 2
+mov dl, b
+add dl, 30h
+int 21H
+call printSpace
+
+
+loop Fibonacci
+mov ah, 0
+int 21h
+main endp
+end
+
+
+
+
+; [SOURCE]: C:\emu8086\MySource\Lab.5.2_PMD.asm

@@ -1,0 +1,126 @@
+org 100h
+
+.stack
+.model small
+.data
+MSG DB 'Rezultatul este: ','$'
+
+sum dw ?
+x db ?
+d dw 0
+sv dw ?
+
+
+.code
+
+main proc
+
+mov ah,1
+int 21h
+sub al,30h
+mov x,al
+mov cl,x
+add cl,1
+
+
+bucla:
+mov ax,d
+cmp ax,2
+jbe f1
+cmp d,5
+jl f21
+f21:
+cmp d,2
+jg f2
+cmp d,6
+jge f3
+
+
+;grad 2
+f1:
+mov bx,ax
+mul bx
+mov bx,3
+mul bx
+
+mov sv,ax
+mov ax,d
+mov bx,6
+mul bx
+mov bx,ax
+add bx,sv
+mov sv,bx
+
+mov ax,sv
+add ax,2
+inc d
+jmp suma
+;grad 1
+
+f2:
+
+mov ax,d
+mov bx,d
+mul ax
+mov bx,d
+mul bx
+mov bx,2
+mul bx
+
+inc d
+jmp suma
+;>=6
+f3:
+mov ax,2
+jmp suma
+
+;adunare tuturor
+suma:
+add sum,ax
+
+loop bucla
+
+start:  mov ax, @data
+mov ds, ax
+mov ah, 09H
+lea dx, MSG
+int 21H
+
+mov ax, sum
+call display
+
+mov ah, 4CH
+int 21H
+
+
+
+
+display   proc
+mov bx, 10
+mov dx, 0000H
+mov cx, 0000H
+
+
+.Dloop1:
+mov dx, 0000H
+div bx
+push dx
+inc cx
+cmp ax, 0
+jne .Dloop1
+
+.Dloop2:  pop dx
+add dx, 30H
+mov ah, 02H
+int 21H
+loop .Dloop2
+ret
+display  endp
+
+
+end
+
+
+
+
+; [SOURCE]: C:\emu8086\MySource\Tema 2 PMD.asm

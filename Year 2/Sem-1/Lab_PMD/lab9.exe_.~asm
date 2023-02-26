@@ -1,0 +1,70 @@
+.model small
+.data
+msg DW ?
+.code
+main proc
+MOV AX, @data
+MOV DS, AX
+
+input:
+mov ah,1
+int 21h
+cmp al,13
+je endofread
+mov [si],al
+inc si
+jmp input
+
+
+endofread:
+mov [si],'$'
+mov di,offset msg
+mov dl,13
+mov ah,2
+int 21h
+mov dl,10
+mov ah,2
+int 21h
+jmp print
+
+
+print:
+cmp [di], 'a'
+je printvoc
+cmp [di], 'e'
+je printvoc
+cmp [di], 'i'
+je printvoc
+cmp [di], 'o'
+je printvoc
+cmp [di], 'u'
+je printvoc
+cmp [di],'$'
+je last
+inc di
+jmp print
+
+printvoc:
+cmp [di],'$'
+je last
+mov dl,[di]
+mov ah,2
+int 21h
+inc di
+jmp print
+
+
+last:
+mov ah,4ch
+int 21h
+
+exit:
+
+
+main endp
+
+end
+
+
+
+; [SOURCE]: C:\emu8086\MySource\lab9.asm

@@ -1,0 +1,45 @@
+.model small
+.data
+A DB 0
+B DB 0
+C DB 0
+.code
+main proc
+MOV AX, @data
+MOV DS, AX
+
+MOV AH, 1
+INT 21H
+MOV A, AL
+MOV DL, ' '
+MOV AH, 2
+INT 21H
+
+MOV AH, 1
+INT 21H
+MOV B, AL
+MOV DL, ' '
+MOV AH, 2
+INT 21H
+
+MOV AH, 1
+INT 21H
+MOV C, AL
+MOV DL, ' '
+MOV AH, 2
+INT 21H
+
+MOV AL, A
+ADD AL, C
+
+SUB AL, B
+
+MOV AH, 2
+MOV DL, AL
+INT 21H
+main endp
+end
+
+
+
+; [SOURCE]: C:\emu8086\MySource\Tema2_Ex3.asm

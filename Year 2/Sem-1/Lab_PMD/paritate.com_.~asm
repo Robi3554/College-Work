@@ -1,0 +1,42 @@
+org 100h
+
+.data
+nr db ?
+msg1 dw ' Numarul par! $'
+msg2 dw ' Numarul impar! $'
+
+
+.code
+main proc
+mov ax, @data
+mov ds, ax
+
+mov ah, 1
+INT 21h
+
+rcr al, 1
+jnc par
+jmp impar
+
+par: mov ah, 09h
+lea dx, msg1
+INT 21h
+jmp exit
+
+impar: mov ah, 09h
+lea dx, msg2
+INT 21h
+jmp exit
+
+
+
+exit:
+
+main endp
+end
+
+
+
+
+
+; [SOURCE]: C:\emu8086\MySource\paritate.asm

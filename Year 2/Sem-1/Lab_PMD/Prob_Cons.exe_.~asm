@@ -1,0 +1,75 @@
+.model small
+.data
+msg DW ?
+.code
+main proc
+MOV AX, @data
+MOV DS, AX
+
+input:
+mov ah,1
+int 21h
+cmp al,13
+je endofread
+mov [si],al
+inc si
+jmp input
+
+
+endofread:
+mov [si],'$'
+mov di,offset msg
+mov dl,13
+mov ah,2
+int 21h
+mov dl,10
+mov ah,2
+int 21h
+jmp print
+
+
+print:
+cmp [di], 'a'
+je skip
+cmp [di], 'e'
+je skip
+cmp [di], 'i'
+je skip
+cmp [di], 'o'
+je skip
+cmp [di], 'u'
+je skip
+cmp [di],'$'
+je last
+jmp printcons
+
+
+
+printcons:
+cmp [di],'$'
+je last
+mov dl,[di]
+mov ah,2
+int 21h
+inc di
+jmp print
+
+skip:
+inc di
+jmp print
+
+
+last:
+mov ah,4ch
+int 21h
+
+exit:
+
+
+main endp
+
+end
+
+
+
+; [SOURCE]: C:\emu8086\MySource\Prob_Cons.asm

@@ -1,0 +1,92 @@
+org 100h
+
+.data
+x dw ?
+afis dw ?
+MSG dw ' $'
+msg1 dw ' Numarul este par: $'
+msg2 dw ' Numarul este impar: $'
+
+
+
+.code
+main proc
+mov ax, @data
+mov ds, ax
+
+mov ah, 1
+INT 21h
+mov ah, 0
+sub ax, 30h
+mov x, ax
+
+rcr ax, 1
+jnc par
+jmp impar
+
+par: mov ah, 09h
+lea dx, msg1
+int 21h
+mov ax, x
+mul ax
+add ax, x
+add ax, 5
+mov afis, ax
+jmp start
+
+impar: mov ah, 09h
+lea dx, msg2
+int 21h
+mov ax, x
+mov bx, x
+mul bx
+mov bx, x
+mul bx
+sub ax, x
+mov afis, ax
+jmp start
+
+start:
+
+MOV AH, 09H
+LEA DX, MSG
+INT 21H           ;Calls MS DOS to display message
+
+MOV AX, afis  ;Number to be displayed
+CALL display            ;Calls procedure display to display number
+
+MOV AH, 4CH
+INT 21H
+
+
+
+
+display   proc       ;Beginning of procedure
+MOV BX, 10     ;Initializes divisor
+MOV DX, 0000H    ;Clears DX
+MOV CX, 0000H    ;Clears CX
+
+;Splitting process starts here
+.Dloop1:
+MOV DX, 0000H    ;Clears DX during jump
+div BX      ;Divides AX by BX
+PUSH DX     ;Pushes DX(remainder) to stack
+INC CX      ;Increments counter to track the number of digits
+CMP AX, 0     ;Checks if there is still something in AX to divide
+JNE .Dloop1     ;Jumps if AX is not zero
+
+.Dloop2:  POP DX      ;Pops from stack to DX
+ADD DX, 30H     ;Converts to it's ASCII equivalent
+MOV AH, 02H
+INT 21H      ;calls DOS to display character
+LOOP .Dloop2    ;Loops till CX equals zero
+RET       ;returns control
+display  ENDP
+
+;main endp
+end
+
+
+
+
+; [SOURCE]: C:\emu8086\MySource\fct_par.asm

@@ -1,0 +1,46 @@
+; INC ++     dw ...
+; DEC --     dw ...
+;NEG  a => -a    ----
+
+;sirul lui Fibonacci cu recursivitate
+
+.model small
+.data
+a DB 0
+b DB 1
+c DB 1
+n DB 4
+bias DB 30h
+
+.code
+main proc
+MOV AX, @data
+MOV DX, AX
+
+MOV DL, a
+ADD DL, bias
+MOV DL, ' '
+MOV AH, 2
+INT 21H
+
+MOV DL, b
+MOV DL, bias
+MOV DL, ' '
+MOV AH, 2
+INT 21H
+
+MOV DL, c
+MOV DL, bias
+MOV DL, ' '
+MOV AH, 2
+INT 21H
+
+main endp
+end
+
+
+
+
+
+
+; [SOURCE]: C:\emu8086\MySource\SirRecursFib.asm
